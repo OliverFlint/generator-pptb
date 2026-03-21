@@ -183,14 +183,12 @@ const getAccountMetadata = async () => {
         output += `Logical Name: ${metadata.LogicalName}\n`;
         output += `Metadata ID: ${metadata.MetadataId}\n`;
         output += `Display Name: ${metadata.DisplayName?.LocalizedLabels?.[0]?.Label || 'N/A'}\n`;
-        output += `Attributes: ${metadata.Attributes?.length || 0}\n`;
 
-        if (metadata.Attributes && metadata.Attributes.length > 0) {
-            output += '\nSample Attributes:\n';
-            metadata.Attributes.slice(0, 5).forEach((attr: any) => {
-                output += `  - ${attr.LogicalName} (${attr.AttributeType})\n`;
-            });
-        }
+        const attributes = await window.dataverseAPI.getEntityRelatedMetadata('account', 'Attributes');
+        output += `\nAttributes (${attributes.value.length}):\n`;
+        attributes.value.forEach((attr: any, index: number) => {
+            output += `${index + 1}. ${attr.LogicalName} (${attr.AttributeType})\n`;
+        });
 
         metadataOutput.value = output;
         emit('log', 'Account metadata retrieved', 'success');

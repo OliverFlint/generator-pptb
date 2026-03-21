@@ -156,14 +156,12 @@ export const DataverseAPIDemo: React.FC<DataverseAPIDemoProps> = ({ connection, 
             output += `Logical Name: ${metadata.LogicalName}\n`;
             output += `Metadata ID: ${metadata.MetadataId}\n`;
             output += `Display Name: ${metadata.DisplayName?.LocalizedLabels?.[0]?.Label || 'N/A'}\n`;
-            output += `Attributes: ${metadata.Attributes?.length || 0}\n`;
 
-            if (metadata.Attributes && metadata.Attributes.length > 0) {
-                output += '\nSample Attributes:\n';
-                metadata.Attributes.slice(0, 5).forEach((attr: any) => {
-                    output += `  - ${attr.LogicalName} (${attr.AttributeType})\n`;
-                });
-            }
+            const attributes = await window.dataverseAPI.getEntityRelatedMetadata('account', 'Attributes');
+            output += `\nAttributes (${attributes.value.length}):\n`;
+            attributes.value.forEach((attr: any, index: number) => {
+                output += `${index + 1}. ${attr.LogicalName} (${attr.AttributeType})\n`;
+            });
 
             setMetadataOutput(output);
             onLog('Account metadata retrieved', 'success');
@@ -190,7 +188,13 @@ export const DataverseAPIDemo: React.FC<DataverseAPIDemoProps> = ({ connection, 
                 <h3>CRUD Operations</h3>
                 <div className="input-group">
                     <label htmlFor="account-name">Account Name:</label>
-                    <input type="text" id="account-name" value={accountName} onChange={(e) => setAccountName(e.target.value)} placeholder="Enter account name" />
+                    <input
+                        type="text"
+                        id="account-name"
+                        value={accountName}
+                        onChange={(e) => setAccountName(e.target.value)}
+                        placeholder="Enter account name"
+                    />
                 </div>
                 <div className="button-group">
                     <button onClick={createAccount} className="btn btn-primary">

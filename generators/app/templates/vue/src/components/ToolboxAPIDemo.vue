@@ -5,15 +5,9 @@
         <div class="example-group">
             <h3>Notifications</h3>
             <div class="button-group">
-                <button @click="showNotification('Success!', 'Operation completed successfully', 'success')" class="btn btn-success">
-                    Show Success
-                </button>
-                <button @click="showNotification('Information', 'This is an informational message', 'info')" class="btn btn-info">
-                    Show Info
-                </button>
-                <button @click="showNotification('Warning', 'Please review this warning', 'warning')" class="btn btn-warning">
-                    Show Warning
-                </button>
+                <button @click="showNotification('Success!', 'Operation completed successfully', 'success')" class="btn btn-success">Show Success</button>
+                <button @click="showNotification('Information', 'This is an informational message', 'info')" class="btn btn-info">Show Info</button>
+                <button @click="showNotification('Warning', 'Please review this warning', 'warning')" class="btn btn-warning">Show Warning</button>
                 <button @click="showNotification('Error', 'An error has occurred', 'error')" class="btn btn-error">Show Error</button>
             </div>
         </div>
@@ -79,7 +73,7 @@ const saveDataToFile = async () => {
             message: 'Export from Vue Sample Tool',
         };
 
-        const filePath = await window.toolboxAPI.utils.saveFile('vue-export.json', JSON.stringify(data, null, 2));
+        const filePath = await window.toolboxAPI.fileSystem.saveFile('vue-export.json', JSON.stringify(data, null, 2));
 
         if (filePath) {
             await showNotification('File Saved', `File saved to: ${filePath}`, 'success');
